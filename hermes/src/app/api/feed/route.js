@@ -3,7 +3,7 @@ import { getFeedStories } from "@/lib/news/feed";
 
 export async function GET() {
   try {
-    const feed = await getFeedStories();
+    const feed = await getFeedStories({ limit: 50 });
 
     return NextResponse.json({
       mode: feed.mode,

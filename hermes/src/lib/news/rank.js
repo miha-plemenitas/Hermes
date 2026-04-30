@@ -3,6 +3,7 @@ const TOPIC_WEIGHTS = {
   News: 6,
   Science: 6,
   Tech: 8,
+  Gaming: 7,
   World: 8,
 };
 

@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { calculateStoryScore } from "@/lib/news/rank";
+import { getTopicFromRawItem } from "@/lib/news/topics";
 
 const STOP_WORDS = new Set([
   "a",
@@ -103,6 +104,32 @@ function getDateRange(items) {
   };
 }
 
+function getClusterTopic(items) {
+  const topicCounts = new Map();
+
+  for (const item of items) {
+    const topic = getTopicFromRawItem(item);
+
+    if (topic === "Top") {
+      continue;
+    }
+
+    topicCounts.set(topic, (topicCounts.get(topic) || 0) + 1);
+  }
+
+  if (topicCounts.size === 0) {
+    return "Top";
+  }
+
+  return Array.from(topicCounts.entries()).sort((a, b) => {
+    if (b[1] !== a[1]) {
+      return b[1] - a[1];
+    }
+
+    return a[0].localeCompare(b[0]);
+  })[0][0];
+}
+
 export async function clusterRawItems({ limit = 100 } = {}) {
   const { data: rawItems, error: rawItemsError } = await supabaseAdmin
     .from("raw_items")
@@ -110,8 +137,13 @@ export async function clusterRawItems({ limit = 100 } = {}) {
       `
         id,
         title,
+        platform,
         published_at,
         created_at,
+        raw_payload,
+        sources (
+          name
+        ),
         story_sources (
           id
         )
@@ -134,7 +166,7 @@ export async function clusterRawItems({ limit = 100 } = {}) {
 
   for (const group of groups) {
     const { firstSeenAt, lastSeenAt } = getDateRange(group);
-    const topic = "News";
+    const topic = getClusterTopic(group);
     const score = calculateStoryScore({
       firstSeenAt,
       lastSeenAt,

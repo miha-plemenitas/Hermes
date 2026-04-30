@@ -51,11 +51,11 @@ a:focus-visible {
 
 @keyframes ticker-slide {
   from {
-    transform: translateX(0);
+    transform: translate3d(100vw, 0, 0);
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-100%, 0, 0);
   }
 }
 
@@ -96,6 +96,35 @@ a:focus-visible {
   animation: pop-in 420ms ease both;
 }
 
+.ticker-shell {
+  position: relative;
+  overflow: hidden;
+  background: var(--foreground);
+  border-top: 2px solid var(--foreground);
+  border-bottom: 2px solid var(--foreground);
+}
+
 .ticker-track {
-  animation: ticker-slide 18s linear infinite;
+  animation: ticker-slide 22s linear infinite;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  padding: 0.5rem 1rem;
+  will-change: transform;
+}
+
+.ticker-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.ticker-quote {
+  letter-spacing: 0.03em;
+}
+
+.ticker-author {
+  color: rgba(255, 212, 0, 0.82);
+  text-transform: none;
 }

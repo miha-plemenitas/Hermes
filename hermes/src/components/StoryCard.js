@@ -34,6 +34,12 @@ export default function StoryCard({ story }) {
         {story.summary}
       </p>
 
+      {story.matchReason ? (
+        <p className="mt-3 border-l-4 border-black pl-3 text-xs font-bold uppercase tracking-normal text-black/70">
+          {story.matchReason}
+        </p>
+      ) : null}
+
       <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
         <span className="flex items-center gap-1 border border-black bg-white px-2 py-1">
           <Layers3 size={13} strokeWidth={3} />
@@ -52,7 +58,7 @@ export default function StoryCard({ story }) {
         <p className="text-xs font-black uppercase text-black/50">Top sources</p>
         <p className="mt-1 text-sm font-bold">{story.sources.join(", ")}</p>
         <p className="mt-2 text-xs font-black uppercase text-black/50">
-          Opens original Reddit post or linked article
+          Opens the original article when available
         </p>
       </div>
     </article>

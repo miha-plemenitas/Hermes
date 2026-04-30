@@ -214,7 +214,7 @@ async function generateSummary(prompt) {
   throw new Error("Missing GEMINI_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY.");
 }
 
-export async function getClustersWithoutSummaries({ limit = 5 } = {}) {
+export async function getClustersWithoutSummaries({ limit = 50 } = {}) {
   const { data, error } = await supabaseAdmin
     .from("story_clusters")
     .select(

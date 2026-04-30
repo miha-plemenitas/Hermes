@@ -1,4 +1,8 @@
 import { getTrendLabel } from "@/lib/news/rank";
+import {
+  getTopicFromRawItem,
+  getTopicFromRedditSource,
+} from "@/lib/news/topics";
 
 export function formatRelativeTime(value) {
   if (!value) {
@@ -40,13 +44,8 @@ export function formatRelativeTime(value) {
 
 export function rawItemToStory(item) {
   const sourceName = item.sources?.name || "Unknown source";
-  const redditUrl = item.raw_payload?.reddit_url;
-  const topic =
-    item.platform === "reddit"
-      ? "Reddit"
-      : item.platform === "rss"
-        ? "RSS"
-        : "Trend";
+  const articleUrl = item.raw_payload?.linked_article_url || item.url;
+  const topic = getTopicFromRawItem(item);
 
   return {
     id: item.id,
@@ -58,8 +57,8 @@ export function rawItemToStory(item) {
     timestamp: formatRelativeTime(item.published_at || item.created_at),
     trend: "Latest",
     score: Math.round(Number(item.score || 0)),
-    url: redditUrl || item.url,
-    detailUrl: redditUrl || item.url,
+    url: articleUrl,
+    detailUrl: articleUrl,
   };
 }
 
@@ -98,13 +97,14 @@ export function clusterToStory(cluster) {
     )
   );
   const leadItem = rawItems[0];
-  const leadUrl = leadItem?.raw_payload?.reddit_url || leadItem?.url;
+  const leadUrl = leadItem?.raw_payload?.linked_article_url || leadItem?.url;
   const sourceCount = sources.length || cluster.source_count || rawItems.length;
   const hasRedditSignal = rawItems.some((item) => item.platform === "reddit");
+  const inferredTopic = hasRedditSignal
+    ? getTopicFromRedditSource(sources[0])
+    : "Top";
   const topic =
-    hasRedditSignal && rawItems.every((item) => item.platform === "reddit")
-      ? "Reddit"
-      : cluster.topic || "Trend";
+    cluster.topic && cluster.topic !== "News" ? cluster.topic : inferredTopic;
 
   return {
     id: cluster.id,

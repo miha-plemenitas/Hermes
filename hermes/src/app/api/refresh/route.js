@@ -1,18 +1,24 @@
 import { NextResponse } from "next/server";
-import { ingestRedditPosts } from "@/lib/news/ingestReddit";
+import { runDailyRefresh } from "@/lib/news/runDailyRefresh";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const result = await ingestRedditPosts();
+    const result = await runDailyRefresh();
 
     return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json(
       {
-        error: "Failed to ingest Reddit posts.",
+        error: "Failed to run daily refresh.",
         message: error.message,
       },
       { status: 500 }
     );
   }
+}
+
+export async function POST() {
+  return GET();
 }

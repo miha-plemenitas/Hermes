@@ -54,7 +54,7 @@ export async function getStoryDetail(id) {
     .map((item) => ({
       id: item.id,
       title: item.title,
-      url: item.raw_payload?.reddit_url || item.url,
+      url: item.raw_payload?.linked_article_url || item.url,
       snippet: item.snippet,
       source: item.sources?.name || "Unknown source",
       timestamp: formatRelativeTime(item.published_at || item.created_at),

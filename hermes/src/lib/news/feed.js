@@ -1,7 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { clusterToStory, rawItemToStory } from "@/lib/news/format";
 
-export async function getClusterFeedStories({ limit = 20 } = {}) {
+export async function getClusterFeedStories({ limit = 50 } = {}) {
   const { data, error } = await supabaseAdmin
     .from("story_clusters")
     .select(
@@ -47,7 +47,7 @@ export async function getClusterFeedStories({ limit = 20 } = {}) {
   return data.map(clusterToStory).filter((story) => story.url);
 }
 
-export async function getFeedStories({ limit = 20 } = {}) {
+export async function getFeedStories({ limit = 50 } = {}) {
   const clusterStories = await getClusterFeedStories({ limit });
 
   if (clusterStories.length > 0) {
@@ -63,7 +63,7 @@ export async function getFeedStories({ limit = 20 } = {}) {
   };
 }
 
-export async function getRawFeedStories({ limit = 20 } = {}) {
+export async function getRawFeedStories({ limit = 50 } = {}) {
   const { data, error } = await supabaseAdmin
     .from("raw_items")
     .select(

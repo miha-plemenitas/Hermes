@@ -1,9 +1,16 @@
 export const topics = [
-  "Top",
-  "Reddit",
   "Tech",
+  "Gaming",
   "Business",
   "Science",
+  "World",
+];
+
+export const feedTabs = [
+  { label: "Top news", value: "top" },
+  { label: "Tech", value: "tech" },
+  { label: "Gaming", value: "gaming" },
+  { label: "You may like", value: "for-you" },
 ];
 
 export const navItems = [
@@ -61,5 +68,17 @@ export const mockStories = [
     timestamp: "2 hr ago",
     trend: "Watch",
     score: 72,
+  },
+  {
+    id: "new-console-update",
+    headline: "Game studios plan a fresh wave of console updates",
+    summary:
+      "Publishers are lining up new patches, performance boosts, and seasonal releases across major consoles. The schedule points to a busy stretch for players watching for hardware and live-service changes.",
+    topic: "Gaming",
+    sourceCount: 6,
+    sources: ["IGN", "Polygon", "GameSpot"],
+    timestamp: "3 hr ago",
+    trend: "Fast rising",
+    score: 79,
   },
 ];
